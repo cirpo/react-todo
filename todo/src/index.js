@@ -1,12 +1,12 @@
 import React from 'react' // eslint-disable-line no-unused-vars
 import ReactDOM from 'react-dom'
-// import App from './App' // eslint-disable-line no-unused-vars
+import App from './App' // eslint-disable-line no-unused-vars
 import './index.css'
 
 let todoslist = {
 
   todos: [],
-
+  filterStatus: undefined,
   subscribe (onChange) {
     this.onChange = onChange
   },
@@ -15,15 +15,19 @@ let todoslist = {
   },
   add (todo) {
     this.todos.push(todo)
-    this.onChange && this.onChange(this.todos)
+    this.onChange && this.onChange(this.todos, this.filterStatus)
   },
-
   toggleTodo (todo) {
     todo.isCompleted = !todo.isCompleted
-    this.onChange && this.onChange(this.todos)
+    this.onChange && this.onChange(this.todos, this.filterStatus)
   },
   filter (filter) {
-    this.onChange && this.onChange(this.todos, filter)
+    this.filterStatus = filter
+    this.onChange && this.onChange(this.todos, this.filterStatus)
+  },
+  createTodo (todo) {
+    this.todos.push({ 'title': todo, 'isCompleted': false })
+    this.onChange && this.onChange(this.todos, this.filterStatus)
   }
 }
 
@@ -32,66 +36,60 @@ const withTodos = Component => (class extends React.Component {
     super()
     this.state = {
       todos: [],
-      filteredTodos: [],
-      filter: 'all'
+      filter: {}
     }
 
     this.onChange = this.onChange.bind(this)
   }
 
   componentDidMount () {
-  //  console.log(todoslist)// eslint-disable-line
-    todoslist.subscribe(this.onChange) // eslint-disable-line
+    todoslist.subscribe(this.onChange)
   }
 
   componentWillUnmount () {
-    todoslist.unsubscribe() // eslint-disable-line
+    todoslist.unsubscribe()
   }
 
-  onChange (todos, filter) {
-    console.log('state', this.state)
-    filter = filter || this.state.filter
-    console.log('todos', todos)
-    console.log('filter', filter)
-    let filteredTodos = todos
+  onChange (todos, filterStatus) {
+    let filter = {isCompleted: filterStatus}
+    this.setState({todos, filter})
+  }
 
-    if (filter === 'completed') {
-    //  console.log('completed')
-      filteredTodos = todos.filter(todo => todo.isCompleted)
-    }
+  createTodo (todo) {
+    todoslist.createTodo(todo)
+  }
 
-    if (filter === 'uncompleted') {
-    //  console.log('uncompleted')
-      filteredTodos = todos.filter(todo => !todo.isCompleted)
-    }
-
-    console.log('filteredTodos', filteredTodos)
-    this.setState({todos, filteredTodos, filter})
+  handleFilter(value) {
+      //todoslist.filter(value)
   }
 
   render () {
-    return <Component todos={this.state.todos} filteredTodos={this.state.filteredTodos} />
+    return <Component createTodo={this.createTodo} todos={this.state.todos} filter={this.state.filter} onFilter={this.handleFilter} />
   }
 })
 
-let Todos = ({todos, filteredTodos}) => ( // eslint-disable-line
+let Todos = ({createTodo, todos, filter, onFilter}) => (  // eslint-disable-line
   <div>
     <Counter todos={todos}/>
-    <Filter />
+    <Filter onFilter={onFilter}/>
+    <TodoForm todos={todos} createTodo={createTodo} />
     <ul>
-      {filteredTodos.map((todo, i) => (
-        <li key={i} onClick={todoslist.toggleTodo.bind(todoslist, todo)}>{todo.title} </li>
-      ))}
+      {todos.map(function (todo, i) { // eslint-disable-line
+        console.log('todos', filter)
+        if (filter.isCompleted === undefined || filter.isCompleted === todo.isCompleted) {
+          return <li key={i} onClick={todoslist.toggleTodo.bind(todoslist, todo)}>{todo.title} </li>
+        }
+      })}
     </ul>
   </div>
 )
 
-let Filter = ({todos}) => (
-    <div>
-      <div onClick={todoslist.filter.bind(todoslist, 'completed')}>completed  </div>
-      <div onClick={todoslist.filter.bind(todoslist, 'uncompleted')}> uncompleted</div>
-      <div onClick={todoslist.filter.bind(todoslist, 'all')}> all</div>
-    </div>
+let Filter = ({todos, onFilter}) => (
+  <div>
+    // <div onClick={onFilter(true)}>completed  </div>
+    // <div onClick={onFilter(false)}> uncompleted</div>
+    // <div onClick={onFilter(undefined)}> all</div>
+  </div>
 )
 
 let Counter = ({todos}) => ( // eslint-disable-line
@@ -102,6 +100,31 @@ let Counter = ({todos}) => ( // eslint-disable-line
     <h4>not completed: {todos.filter((todo) => !todo.isCompleted).length}</h4>
   </div>
 )
+
+class TodoForm extends React.Component {
+  constructor (props) {
+    super(props)
+    this.props = props
+  }
+
+  handleSubmit (e) {
+    e.preventDefault()
+    this.props.createTodo(this.refs.todo.value)
+    return
+  }
+
+  render () {
+    return (
+      <form onSubmit={this.handleSubmit.bind(this)}>
+        <input
+          type='text'
+          ref='todo'
+          />
+        <input type='submit' value='Add'/>
+      </form>
+    )
+  }
+}
 
 Todos = withTodos(Todos)
 
