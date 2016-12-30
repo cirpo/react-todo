@@ -76,11 +76,10 @@ const withTodos = Component => (class extends React.Component {
   }
 })
 
-let Todos = ({todoslist, todos, createTodo, toggleTodo, filter, onFilter}) => (  // eslint-disable-line
+let Todos = ({todos, createTodo, toggleTodo, filter, onFilter}) => (  // eslint-disable-line
   <div className="container">
     <Counter todos={todos}/>
     <Filter filter={filter} onFilter={onFilter}/>
-    <TodoForm todos={todos} createTodo={todoslist.createTodo} />
     <TodoForm todos={todos} createTodo={createTodo} />
     <List>
       {todos.map(function (todo, i) { // eslint-disable-line
