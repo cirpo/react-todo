@@ -1,14 +1,10 @@
 import React from 'react' // eslint-disable-line no-unused-vars
-import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
 import {List, ListItem} from 'material-ui/List'
-import Divider from 'material-ui/Divider'
 import Checkbox from 'material-ui/Checkbox'
 import TextField from 'material-ui/TextField'
 import RaisedButton from 'material-ui/RaisedButton'
 
-let todoslist = {
-  todos: [],
-  filterStatus: undefined,
+let todos = {
   subscribe (onChange) {
     this.onChange = onChange
   },
@@ -16,25 +12,11 @@ let todoslist = {
     this.onChange = null
   },
   add (todo) {
-    this.todos.push(todo)
-    this.onChange && this.onChange(this.todos, this.filterStatus)
-  },
-  toggleTodo (todo) {
-    todo.isCompleted = !todo.isCompleted
-    this.onChange && this.onChange(this.todos, this.filterStatus)
-  },
-  filter (filter) {
-    this.filterStatus = filter
-    this.onChange && this.onChange(this.todos, this.filterStatus)
-  },
-  createTodo (todo) {
-    this.todos.push({ 'title': todo, 'isCompleted': false })
-    this.onChange && this.onChange(this.todos, this.filterStatus)
-    console.log('ciao this', this)
+    this.onChange && this.onChange(todo)
   }
 }
 
-const withTodos = Component => (class extends React.Component {
+const withTodos = (Component, todos) => (class extends React.Component {
   constructor () {
     super()
     this.state = {
@@ -43,36 +25,43 @@ const withTodos = Component => (class extends React.Component {
     }
 
     this.onChange = this.onChange.bind(this)
+    this.createTodo = this.createTodo.bind(this)
+    this.onFilter = this.onFilter.bind(this)
+    this.toggleTodo = this.toggleTodo.bind(this)
   }
 
   componentDidMount () {
-    todoslist.subscribe(this.onChange)
+    todos.subscribe(this.onChange)
+    todos.add({"title": "do it", "isCompleted": false})
   }
 
   componentWillUnmount () {
-    todoslist.unsubscribe()
+    todos.unsubscribe()
   }
 
-  onChange (todos, filterStatus) {
-    let filter = {isCompleted: filterStatus}
-    // console.log('onChange', todos)
-    this.setState({todos, filter})
+  onChange (todo) {
+    console.log('onChange', todo)
+    this.createTodo(todo)
+    // this.setState({todo})
   }
 
   createTodo (todo) {
-    todoslist.createTodo(todo)
+    this.state.todos.push(todo)
+    this.setState({todos: this.state.todos})
   }
 
   toggleTodo (todo) {
-    todoslist.toggleTodo(todo)
+    todo.isCompleted = !todo.isCompleted
+    this.setState(this.state)
   }
 
   onFilter (value) {
-    todoslist.filter(value)
+    this.filterStatus = value
+    this.setState({filter: {'isCompleted': value}})
   }
 
   render () {
-    return <Component todoslist={todoslist} todos={this.state.todos} createTodo={this.createTodo} toggleTodo={this.toggleTodo} filter={this.state.filter} onFilter={this.onFilter} />
+    return <Component todos={this.state.todos} createTodo={this.createTodo} toggleTodo={this.toggleTodo} filter={this.state.filter} onFilter={this.onFilter} />
   }
 })
 
@@ -117,7 +106,7 @@ class TodoForm extends React.Component {
   }
 
   handleSubmit (e) {
-    this.props.createTodo(this.state.value)
+    this.props.createTodo({'title': this.state.value, 'isCompleted': false})
     this.setState({value: ''})
     e.preventDefault()
   }
@@ -140,10 +129,10 @@ class TodoForm extends React.Component {
   }
 }
 
-Todos = withTodos(Todos)
+Todos = withTodos(Todos, todos)
 
 window.todos = {
-  add: todoslist.add.bind(todoslist)
+  add: todos.add.bind(todos)
 }
 
 export default Todos
