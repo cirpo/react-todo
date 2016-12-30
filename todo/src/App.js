@@ -1,21 +1,24 @@
-import React, { Component } from 'react';
-import logo from './logo.svg';
+import React, { Component } from 'react'
+import Todos from './todo.js'
 import './App.css';
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
 
 class App extends Component {
   render() {
     return (
+      <MuiThemeProvider>
       <div className="App">
         <div className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <h2>Welcome to React cirpo</h2>
+          <h2>TODO</h2>
         </div>
-        <p className="App-intro">
-          To get started, edit <code>src/App.js</code> and save to reload.
-        </p>
+        <Todos/>
       </div>
-    );
+
+    </MuiThemeProvider>
+    )
   }
 }
-
+//window.todoslist.add({ 'title': 'todo1', 'isCompleted': false })
+// todoslist.add({ 'title': 'todo2', 'isCompleted': false })
+// todoslist.add({ 'title': 'todo3', 'isCompleted': true })
 export default App;

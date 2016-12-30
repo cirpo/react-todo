@@ -1,6 +1,18 @@
-.App {
-  text-align: center;
+@import url('https://fonts.googleapis.com/css?family=Roboto:300,400,500');
+
+/*body { text-align:center; }*/
+
+.container {
+  //background-color: red;
+  min-width: 400px;
+  font-family: 'Roboto', sans-serif;
+  display: inline-block;
+  /*width: 500px;*/
 }
+
+/*.App {
+  text-align: center;
+}*/
 
 .App-logo {
   animation: App-logo-spin infinite 20s linear;
