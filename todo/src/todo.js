@@ -2,7 +2,10 @@ import React from 'react' // eslint-disable-line no-unused-vars
 import {List, ListItem} from 'material-ui/List'
 import Checkbox from 'material-ui/Checkbox'
 import TextField from 'material-ui/TextField'
-import RaisedButton from 'material-ui/RaisedButton'
+import FlatButton from 'material-ui/FlatButton'
+import FloatingActionButton from 'material-ui/FloatingActionButton'
+import ContentAdd from 'material-ui/svg-icons/content/add'
+import Badge from 'material-ui/Badge'
 
 let todos = {
   subscribe (onChange) {
@@ -32,7 +35,11 @@ const withTodos = (Component, todos) => (class extends React.Component {
 
   componentDidMount () {
     todos.subscribe(this.onChange)
-    todos.add({"title": "do it", "isCompleted": false})
+    todos.add({"title": "do it", 'done': false})
+    todos.add({"title": "daje", 'done': false})
+    todos.add({"title": "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum", 'done': true})
+    todos.add({"title": "Sed ut perspiciatis unde omnis iste natus error ", 'done': false})
+    todos.add({"title": "pota ciao", 'done': true})
   }
 
   componentWillUnmount () {
@@ -42,7 +49,6 @@ const withTodos = (Component, todos) => (class extends React.Component {
   onChange (todo) {
     console.log('onChange', todo)
     this.createTodo(todo)
-    // this.setState({todo})
   }
 
   createTodo (todo) {
@@ -51,13 +57,13 @@ const withTodos = (Component, todos) => (class extends React.Component {
   }
 
   toggleTodo (todo) {
-    todo.isCompleted = !todo.isCompleted
+    todo.done = !todo.done
     this.setState(this.state)
   }
 
   onFilter (value) {
     this.filterStatus = value
-    this.setState({filter: {'isCompleted': value}})
+    this.setState({filter: {'done': value}})
   }
 
   render () {
@@ -67,33 +73,44 @@ const withTodos = (Component, todos) => (class extends React.Component {
 
 let Todos = ({todos, createTodo, toggleTodo, filter, onFilter}) => (  // eslint-disable-line
   <div className="container">
-    <Counter todos={todos}/>
-    <Filter filter={filter} onFilter={onFilter}/>
     <TodoForm todos={todos} createTodo={createTodo} />
+    <Filter todos={todos} filter={filter} onFilter={onFilter}/>
     <List>
       {todos.map(function (todo, i) { // eslint-disable-line
-        if (filter.isCompleted === undefined || filter.isCompleted === todo.isCompleted) {
-          return <ListItem key={i} onClick={() => toggleTodo(todo)} primaryText={todo.title} leftCheckbox={<Checkbox checked={todo.isCompleted}/>} />
+        if (filter.done === undefined || filter.done === todo.done) {
+          return <ListItem style={{ 'borderBottom': 'solid 1px #ccc'}} key={i} onClick={() => toggleTodo(todo)} primaryText={todo.title} leftCheckbox={<Checkbox checked={todo.done}/>} />
         }
       })}
     </List>
   </div>
 )
 
-let Filter = ({filter, onFilter}) => (
+let Filter = ({todos, filter, onFilter}) => (
   <div>
-    <RaisedButton onClick={() => onFilter(true)} label="completed" secondary={filter.isCompleted === true} />
-    <RaisedButton onClick={() => onFilter(false)} label="active" secondary={filter.isCompleted === false} />
-    <RaisedButton onClick={() => onFilter(undefined)} label="all" secondary={filter.isCompleted === undefined} />
-  </div>
-)
-
-let Counter = ({todos}) => ( // eslint-disable-line
-  <div>
-    <h2>Counter</h2>
-    <h4>total: {todos.length}</h4>
-    <h4>completed: {todos.filter((todo) => todo.isCompleted).length}</h4>
-    <h4>not completed: {todos.filter((todo) => !todo.isCompleted).length}</h4>
+    <Badge
+      badgeContent={todos.length}
+      secondary={true}
+      badgeStyle={{top: 5, right: 5}}
+      style={{padding: '22px 0px 0px 12px'}}
+    >
+    <FlatButton onClick={() => onFilter(undefined)} label="all" secondary={filter.done === undefined} />
+  </Badge>
+  <Badge
+    badgeContent={todos.filter((todo) => !todo.done).length }
+    secondary={true}
+    badgeStyle={{top: 5, right: 5}}
+    style={{padding: '22px 0px 0px 12px'}}
+  >
+    <FlatButton onClick={() => onFilter(false)} label="active" secondary={filter.done === false} />
+    </Badge>
+      <Badge
+        badgeContent={todos.filter((todo) => todo.done).length}
+        secondary={true}
+        badgeStyle={{top: 5, right: 5}}
+        style={{padding: '22px 0px 0px 12px'}}
+      >
+    <FlatButton onClick={() => onFilter(true)} label="done" secondary={filter.done === true} />
+    </Badge>
   </div>
 )
 
@@ -106,8 +123,11 @@ class TodoForm extends React.Component {
   }
 
   handleSubmit (e) {
-    this.props.createTodo({'title': this.state.value, 'isCompleted': false})
-    this.setState({value: ''})
+    let newTodo = this.state.value
+    if ('' !== newTodo) {
+      this.props.createTodo({'title': newTodo, 'done': false})
+      this.setState({value: ''})
+    }
     e.preventDefault()
   }
 
@@ -123,7 +143,9 @@ class TodoForm extends React.Component {
           value={this.state.value}
           onChange={e => this.setState({ value: e.target.value })}
           />
-        <input type='submit' value='Add'/>
+        <FloatingActionButton mini={true} type='submit' label='Add'>
+          <ContentAdd />
+     </FloatingActionButton>
       </form>
     )
   }

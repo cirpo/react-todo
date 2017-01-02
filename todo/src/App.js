@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import Todos from './todo.js'
 import './App.css';
+import '../node_modules/material-design-lite/material.min.css'
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
 
 class App extends Component {
@@ -18,7 +19,5 @@ class App extends Component {
     )
   }
 }
-//window.todoslist.add({ 'title': 'todo1', 'isCompleted': false })
-// todoslist.add({ 'title': 'todo2', 'isCompleted': false })
-// todoslist.add({ 'title': 'todo3', 'isCompleted': true })
+
 export default App;
