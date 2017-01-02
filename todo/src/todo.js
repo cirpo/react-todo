@@ -1,25 +1,6 @@
-import React from 'react' // eslint-disable-line no-unused-vars
-import {List, ListItem} from 'material-ui/List'
-import Checkbox from 'material-ui/Checkbox'
-import TextField from 'material-ui/TextField'
-import FlatButton from 'material-ui/FlatButton'
-import FloatingActionButton from 'material-ui/FloatingActionButton'
-import ContentAdd from 'material-ui/svg-icons/content/add'
-import Badge from 'material-ui/Badge'
+import React from 'react'
 
-let todos = {
-  subscribe (onChange) {
-    this.onChange = onChange
-  },
-  unsubscribe () {
-    this.onChange = null
-  },
-  add (todo) {
-    this.onChange && this.onChange(todo)
-  }
-}
-
-const withTodos = (Component, todos) => (class extends React.Component {
+export default (Component, todoBrowserApi) => (class extends React.Component {
   constructor () {
     super()
     this.state = {
@@ -34,24 +15,31 @@ const withTodos = (Component, todos) => (class extends React.Component {
   }
 
   componentDidMount () {
-    todos.subscribe(this.onChange)
-    todos.add({"title": "do it", 'done': false})
-    todos.add({"title": "daje", 'done': false})
-    todos.add({"title": "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum", 'done': true})
-    todos.add({"title": "Sed ut perspiciatis unde omnis iste natus error ", 'done': false})
-    todos.add({"title": "pota ciao", 'done': true})
+    todoBrowserApi.subscribe(this.onChange)
+    todoBrowserApi.add({"title": "do it", 'done': false})
+    todoBrowserApi.add({"title": "daje", 'done': false})
+    todoBrowserApi.add({"title": "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum", 'done': true})
+    todoBrowserApi.add({"title": "Sed ut perspiciatis unde omnis iste natus error ", 'done': false})
+    todoBrowserApi.add({"title": "pota ciao", 'done': true})
   }
 
   componentWillUnmount () {
-    todos.unsubscribe()
+    todoBrowserApi.unsubscribe()
   }
 
   onChange (todo) {
-    console.log('onChange', todo)
     this.createTodo(todo)
   }
 
   createTodo (todo) {
+    if (typeof todo.title === "undefined" || todo.title.trim() === '') {
+      throw new Error('the Todo object must contain the title attribute')
+    }
+
+    if (typeof todo.done === "undefined" || todo.done !== true ) {
+      todo.done = false
+    }
+
     this.state.todos.push(todo)
     this.setState({todos: this.state.todos})
   }
@@ -67,94 +55,11 @@ const withTodos = (Component, todos) => (class extends React.Component {
   }
 
   render () {
-    return <Component todos={this.state.todos} createTodo={this.createTodo} toggleTodo={this.toggleTodo} filter={this.state.filter} onFilter={this.onFilter} />
+    return <Component
+      todos={this.state.todos}
+      createTodo={this.createTodo}
+      toggleTodo={this.toggleTodo}
+      filter={this.state.filter}
+      onFilter={this.onFilter} />
   }
 })
-
-let Todos = ({todos, createTodo, toggleTodo, filter, onFilter}) => (  // eslint-disable-line
-  <div className="container">
-    <TodoForm todos={todos} createTodo={createTodo} />
-    <Filter todos={todos} filter={filter} onFilter={onFilter}/>
-    <List>
-      {todos.map(function (todo, i) { // eslint-disable-line
-        if (filter.done === undefined || filter.done === todo.done) {
-          return <ListItem style={{ 'borderBottom': 'solid 1px #ccc'}} key={i} onClick={() => toggleTodo(todo)} primaryText={todo.title} leftCheckbox={<Checkbox checked={todo.done}/>} />
-        }
-      })}
-    </List>
-  </div>
-)
-
-let Filter = ({todos, filter, onFilter}) => (
-  <div>
-    <Badge
-      badgeContent={todos.length}
-      secondary={true}
-      badgeStyle={{top: 5, right: 5}}
-      style={{padding: '22px 0px 0px 12px'}}
-    >
-    <FlatButton onClick={() => onFilter(undefined)} label="all" secondary={filter.done === undefined} />
-  </Badge>
-  <Badge
-    badgeContent={todos.filter((todo) => !todo.done).length }
-    secondary={true}
-    badgeStyle={{top: 5, right: 5}}
-    style={{padding: '22px 0px 0px 12px'}}
-  >
-    <FlatButton onClick={() => onFilter(false)} label="active" secondary={filter.done === false} />
-    </Badge>
-      <Badge
-        badgeContent={todos.filter((todo) => todo.done).length}
-        secondary={true}
-        badgeStyle={{top: 5, right: 5}}
-        style={{padding: '22px 0px 0px 12px'}}
-      >
-    <FlatButton onClick={() => onFilter(true)} label="done" secondary={filter.done === true} />
-    </Badge>
-  </div>
-)
-
-class TodoForm extends React.Component {
-  constructor (props) {
-    super(props)
-    this.props = props
-    this.state = {value: ''}
-    this.handleSubmit = this.handleSubmit.bind(this)
-  }
-
-  handleSubmit (e) {
-    let newTodo = this.state.value
-    if ('' !== newTodo) {
-      this.props.createTodo({'title': newTodo, 'done': false})
-      this.setState({value: ''})
-    }
-    e.preventDefault()
-  }
-
-  handleChange (event) {
-    this.setState({value: event.target.value})
-  }
-
-  render () {
-    return (
-      <form onSubmit={this.handleSubmit.bind(this)}>
-        <TextField
-          hintText="What's next?"
-          value={this.state.value}
-          onChange={e => this.setState({ value: e.target.value })}
-          />
-        <FloatingActionButton mini={true} type='submit' label='Add'>
-          <ContentAdd />
-     </FloatingActionButton>
-      </form>
-    )
-  }
-}
-
-Todos = withTodos(Todos, todos)
-
-window.todos = {
-  add: todos.add.bind(todos)
-}
-
-export default Todos

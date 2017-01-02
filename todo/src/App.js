@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import Todos from './todo.js'
+import TodoApp from './TodoApp.js'
 import './App.css';
 import '../node_modules/material-design-lite/material.min.css'
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
@@ -12,7 +12,7 @@ class App extends Component {
         <div className="App-header">
           <h2>TODO</h2>
         </div>
-        <Todos/>
+        <TodoApp/>
       </div>
 
     </MuiThemeProvider>
