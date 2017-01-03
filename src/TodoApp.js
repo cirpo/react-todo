@@ -7,7 +7,7 @@ import withTodo from './Todo'
 
 let Todos = ({todos, createTodo, toggleTodo, filter, onFilter}) => (  // eslint-disable-line
   <div className="container">
-    <TodoForm todos={todos} createTodo={createTodo} />
+    <TodoForm createTodo={createTodo} />
     <TodoFilter todos={todos} filter={filter} onFilter={onFilter}/>
     <TodoList todos={todos} filter={filter} toggleTodo={toggleTodo} />
   </div>
