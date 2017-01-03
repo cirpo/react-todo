@@ -31,11 +31,12 @@ class TodoForm extends React.Component {
           hintText="What's next?"
           value={this.state.value}
           onChange={e => this.setState({ value: e.target.value })}
-        />
+          />
         <FloatingActionButton mini={true} type='submit' label='Add'>
           <ContentAdd />
         </FloatingActionButton>
-        </form>
+
+      </form>
     )
   }
 }

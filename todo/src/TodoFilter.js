@@ -1,33 +1,26 @@
 import React from 'react'
-import FlatButton from 'material-ui/FlatButton'
-import Badge from 'material-ui/Badge'
-import injectTapEventPlugin from 'react-tap-event-plugin'
-injectTapEventPlugin()
 
 let TodoFilter = ({todos, filter, onFilter}) => (
-  <div>
-    <Badge
-      badgeContent={todos.length}
-      secondary={true}
-      badgeStyle={{top: 5, right: 5}}
-      style={{padding: '22px 0px 0px 12px'}}>
-      <FlatButton onClick={() => onFilter(undefined)} label="all" secondary={filter.done === undefined} />
-    </Badge>
-    <Badge
-      badgeContent={todos.filter((todo) => !todo.done).length }
-      secondary={true}
-      badgeStyle={{top: 5, right: 5}}
-      style={{padding: '22px 0px 0px 12px'}}>
-      <FlatButton onClick={() => onFilter(false)} label="active" secondary={filter.done === false} />
-    </Badge>
-    <Badge
-      badgeContent={todos.filter((todo) => todo.done).length}
-      secondary={true}
-      badgeStyle={{top: 5, right: 5}}
-      style={{padding: '22px 0px 0px 12px'}}>
-      <FlatButton onClick={() => onFilter(true)} label="done" secondary={filter.done === true} />
-    </Badge>
-  </div>
+    <div>
+        <span className="mdl-badge mdl-badge--overlap" data-badge={todos.length}
+          onClick={() => onFilter(undefined)}>
+          <button className={'mdl-button mdl-js-button' + (filter.done === undefined ? ' mdl-button--accent' : '')}>
+          ALL
+          </button>
+        </span>
+        <span className="mdl-badge mdl-badge--overlap" data-badge={todos.filter((todo) => !todo.done).length }
+          onClick={() => onFilter(false)}>
+          <button className={'mdl-button mdl-js-button' + (filter.done === false ? ' mdl-button--accent' : '')}>
+          ACTIVE
+          </button>
+        </span>
+        <span className="mdl-badge mdl-badge--overlap" data-badge={todos.filter((todo) => todo.done).length}
+          onClick={() => onFilter(true)}>
+          <button className={'mdl-button mdl-js-button' + (filter.done === true ? ' mdl-button--accent' : '')}>
+          DONE
+          </button>
+        </span>
+    </div>
 )
 
 export default TodoFilter

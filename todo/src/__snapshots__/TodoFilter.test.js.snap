@@ -1,0 +1,32 @@
+exports[`test Link changes the class when hovered 1`] = `
+<div>
+  <span
+    className="mdl-badge"
+    data-badge={1}
+    onClick={[Function]}>
+    <button
+      className="mdl-button mdl-js-button mdl-button--accent">
+      ALL
+    </button>
+  </span>
+  <span
+    className="mdl-badge"
+    data-badge={1}
+    onClick={[Function]}>
+    <button
+      className="mdl-button mdl-js-button mdl-button--accent">
+      ACTIVE
+    </button>
+  </span>
+  <span
+    className="mdl-badge"
+    data-badge={0}
+    onClick={[Function]}
+    secondary={false}>
+    <button
+      className="mdl-button mdl-js-button mdl-button--accent">
+      DONE
+    </button>
+  </span>
+</div>
+`;
