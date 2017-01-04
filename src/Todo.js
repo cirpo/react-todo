@@ -16,10 +16,10 @@ export default (Component, todoBrowserApi) => (class extends React.Component {
 
   componentDidMount () {
     todoBrowserApi.subscribe(this.onChange)
-    todoBrowserApi.add({'title': 'do it', 'done': false})
+    todoBrowserApi.add({'title': 'Buy RockWerchter camping tickets', 'done': false})
     todoBrowserApi.add({'title': 'Buy Milk!', 'done': false})
-    todoBrowserApi.add({'title': 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum', 'done': true})
-    todoBrowserApi.add({'title': 'Sed ut perspiciatis unde omnis iste natus error', 'done': false})
+    todoBrowserApi.add({'title': 'Call a gardner', 'done': true})
+    todoBrowserApi.add({'title': 'Update CV', 'done': false})
     todoBrowserApi.add({'title': 'Schedule Cuba trip', 'done': true})
   }
 
@@ -41,12 +41,19 @@ export default (Component, todoBrowserApi) => (class extends React.Component {
     }
 
     this.state.todos.push(todo)
-    this.setState({todos: this.state.todos})
+
+    this.setState({todos: this.sortByDone(this.state.todos)})
+  }
+
+  sortByDone(todos) {
+      return todos.sort((todoA, todoB) =>
+       (todoA.done === todoB.done) ? 0 : todoA.done ? -1 : 1)
   }
 
   toggleTodo (todo) {
     todo.done = !todo.done
-    this.setState(this.state)
+
+    this.setState({todos: this.sortByDone(this.state.todos)})
   }
 
   onFilter (value) {

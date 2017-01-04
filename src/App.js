@@ -4,7 +4,6 @@ import './App.css'
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
 import getMuiTheme from 'material-ui/styles/getMuiTheme'
 
-
 const muiTheme = getMuiTheme({
   palette: {
     textColor: '#404040',
