@@ -16,11 +16,11 @@ export default (Component, todoBrowserApi) => (class extends React.Component {
 
   componentDidMount () {
     todoBrowserApi.subscribe(this.onChange)
-    todoBrowserApi.add({"title": "do it", 'done': false})
-    todoBrowserApi.add({"title": "daje", 'done': false})
-    todoBrowserApi.add({"title": "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum", 'done': true})
-    todoBrowserApi.add({"title": "Sed ut perspiciatis unde omnis iste natus error ", 'done': false})
-    todoBrowserApi.add({"title": "pota ciao", 'done': true})
+    todoBrowserApi.add({'title': 'do it', 'done': false})
+    todoBrowserApi.add({'title': 'Buy Milk!', 'done': false})
+    todoBrowserApi.add({'title': 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum', 'done': true})
+    todoBrowserApi.add({'title': 'Sed ut perspiciatis unde omnis iste natus error', 'done': false})
+    todoBrowserApi.add({'title': 'Schedule Cuba trip', 'done': true})
   }
 
   componentWillUnmount () {
@@ -32,11 +32,11 @@ export default (Component, todoBrowserApi) => (class extends React.Component {
   }
 
   createTodo (todo) {
-    if (typeof todo.title === "undefined" || todo.title.trim() === '') {
+    if (typeof todo.title === 'undefined' || todo.title.trim() === '') {
       throw new Error('the Todo object must contain the title attribute')
     }
 
-    if (typeof todo.done === "undefined" || todo.done !== true ) {
+    if (typeof todo.done === 'undefined' || todo.done !== true ) {
       todo.done = false
     }
 

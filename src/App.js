@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import TodoApp from './TodoApp.js'
-import './App.css';
-import '../node_modules/material-design-lite/material.min.css'
+import './App.css'
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
 
 class App extends Component {
@@ -20,4 +19,4 @@ class App extends Component {
   }
 }
 
-export default App;
+export default App

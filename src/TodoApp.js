@@ -5,7 +5,7 @@ import TodoFilter from './TodoFilter'
 import todoBrowserApi from './todoBrowserApi'
 import withTodo from './Todo'
 
-let Todos = ({todos, createTodo, toggleTodo, filter, onFilter}) => (  // eslint-disable-line
+let Todos = ({todos, createTodo, toggleTodo, filter, onFilter}) => (
   <div className="container">
     <TodoForm createTodo={createTodo} />
     <TodoFilter todos={todos} filter={filter} onFilter={onFilter}/>
