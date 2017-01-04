@@ -24,7 +24,7 @@ describe('<TodoForm />', () => {
     const wrapper = shallow(
       <TodoForm createTodo = {createTodo} />
     )
-    expect(wrapper.find('TextField').props().hintText).toBe("What's next?")
+    expect(wrapper.find('TextField').prop('hintText')).toBe("What's next?")
   })
 
   it('should have an empty string as a default value', () => {
@@ -49,9 +49,9 @@ describe('<TodoForm />', () => {
 
     input.simulate('change', {target: {value: newTodo}});
 
-    expect(wrapper.find('TextField').props().value).toBe('buy milk!')
+    expect(wrapper.find('TextField').prop('value')).toBe('buy milk!')
 
-    input.simulate('submit');
+    input.simulate('submit')
     expect(createTodo).toBeCalledWith({'title': newTodo, 'done': false});
   })
 })

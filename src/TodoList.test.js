@@ -7,7 +7,7 @@ const toggleTodo = jest.fn()
 
 describe('<TodoList />', () => {
   it('should render the TodoList component, with all the todos', () => {
-    const filter = { 'done' : undefined}
+    const filter = {'done' : undefined}
     const wrapper = shallow(
       <TodoList todos={todos} toggleTodo={toggleTodo} filter={filter}/>
     )
@@ -25,7 +25,7 @@ describe('<TodoList />', () => {
   })
 
   it('should render the TodoList component, with the done todos', () => {
-    const filter = { 'done' : true}
+    const filter = {'done' : true}
     const wrapper = shallow(
       <TodoList todos={todos} toggleTodo={toggleTodo} filter={filter}/>
     )

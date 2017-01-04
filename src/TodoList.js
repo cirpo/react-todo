@@ -2,7 +2,7 @@ import React from 'react'
 import {List, ListItem} from 'material-ui/List'
 import Checkbox from 'material-ui/Checkbox'
 
-const style = { 'borderBottom': 'solid 1px #ccc'}
+const style = {'borderBottom': 'solid 1px #ccc'}
 
 let TodoList = ({todos, toggleTodo, filter}) => (
 <List>
@@ -16,7 +16,9 @@ let TodoList = ({todos, toggleTodo, filter}) => (
                   leftCheckbox={<Checkbox checked={todo.done}/>}
                 />
       }
+      return ''
     })
+
   }
 </List>
 )
