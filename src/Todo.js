@@ -53,12 +53,12 @@ export default (Component, todoBrowserApi) => (class extends React.Component {
   toggleTodo (todo) {
     todo.done = !todo.done
 
-    this.setState({todos: this.sortByDone(this.state.todos)})
+    this.setState({todos: this.state.todos})
   }
 
   onFilter (value) {
     this.filterStatus = value
-    this.setState({filter: {'done': value}})
+    this.setState({todos: this.sortByDone(this.state.todos), filter: {'done': value}})
   }
 
   render () {
