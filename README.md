@@ -1,3 +1,8 @@
+# REACT TODO
+
+It's just the usuale todo list app, withouth using Redux.
+I did it for an interview an to discover and better understand react, keeping thigs as simple as possibile.
+
 This project was bootstrapped with [Create React App](https://github.com/facebookincubator/create-react-app).
 
 Below you will find some information on how to perform common tasks.<br>
