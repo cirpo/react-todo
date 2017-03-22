@@ -1,3 +1,16 @@
+# CHALLENGE
+
+Build a simple client side Todo web application (no backend) using any JavaScript framework (preferably React) that has the following capabilities
+* Ability to create a todo.
+* Mark a todo to be completed.
+* A global status on the top of the page that shows how many todos are on the board in total, completed
+* Filter todo’s by status
+* Using CSS to style the page according to their needs
+
+With the following conditions
+* Expose the todos data on the browser console such that todos.add({title:”something”, done:”true”} will automatically update the board on the browser.
+
+
 # REACT TODO
 
 It's just the usuale todo list app, withouth using Redux.
